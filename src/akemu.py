@@ -86,11 +86,35 @@ class Akemu(customtkinter.CTk):
     def type_text(buffer: str) -> None:
         """
         Печатает текст из буфера обмена с задержкой.
+        - Основная задержка между символами: 0.3-0.8 секунды
+        - Дополнительная пауза: 1.2-3.2 секунды
+        - Интервал между паузами: 20-40 символов
         """
+        chars_typed = 0
+        next_pause_at = random.randint(20, 40)
+        
         for character in buffer:
             if keyboard.is_pressed('p'):
                 break
+                
             keyboard.write(character, delay=random.uniform(0.3, 0.8))
+            chars_typed += 1
+            
+            # Проверяем, не достигли ли мы момента для дополнительной паузы
+            if chars_typed >= next_pause_at:
+                # Делаем дополнительную паузу
+                pause_duration = random.uniform(1.2, 3.2)
+                start_time = time.time()
+                
+                # Во время паузы продолжаем проверять нажатие 'p'
+                while time.time() - start_time < pause_duration:
+                    if keyboard.is_pressed('p'):
+                        return
+                    time.sleep(0.05)  # Частые проверки для быстрого реагирования
+                
+                # Сбрасываем счетчик и выбираем новый интервал
+                chars_typed = 0
+                next_pause_at = random.randint(20, 40)
 
     def start_typing(self) -> None:
         """
