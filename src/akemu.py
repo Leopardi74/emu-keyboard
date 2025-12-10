@@ -90,7 +90,7 @@ class Akemu(customtkinter.CTk):
         for character in buffer:
             if keyboard.is_pressed('p'):
                 break
-            keyboard.write(character, delay=random.uniform(0.095, 0.15))
+            keyboard.write(character, delay=random.uniform(0.3, 0.8))
 
     def start_typing(self) -> None:
         """
